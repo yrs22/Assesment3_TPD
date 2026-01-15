@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malam di Bumi Perkemahan</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;600&display=swap');
+
+        :root {
+            --bg-color: #1a1a2e;
+            --card-bg: #16213e;
+            --text-color: #e94560;
+            --body-text: #bdc3c7;
+            --accent: #0f3460;
+            --btn-hover: #e94560;
+            --btn-text: #fff;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--body-text);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 600px;
+            width: 100%;
+            border: 1px solid var(--accent);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h1 {
+            font-family: 'Lora', serif;
+            color: var(--text-color);
+            font-size: 2em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 0.9em;
+            color: #888;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .story-text {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            text-align: justify;
+        }
+
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        button {
+            background-color: var(--accent);
+            color: var(--btn-text);
+            border: none;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        button:hover {
+            background-color: var(--btn-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
+        }
+
+        .ending-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .good { background-color: #2ecc71; color: #fff; }
+        .bad { background-color: #e74c3c; color: #fff; }
+        .neutral { background-color: #f39c12; color: #fff; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+            h1 { font-size: 1.5em; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="game-content">
+            <!-- Content will be injected here by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // State management
+        const state = {
+            hasGossiped: false,
+            dikaHurt: false
+        };
+
+        // Story Data
+        const storyNodes = {
+            start: {
+                title: "Semester 2: Awal Keretakan",
+                text: "Namaku Rian . Dulu, pas kelas 10, semua orang tahu kalau Dika  dan Lina  itu deket banget. Hampir pacaran, lah. Tapi masuk kelas 11 semester 2 ini, circle kami mulai berubah.<br><br>Akhir-akhir ini, aku sering melihat Bram  curi-curi pandang ke Lina. Awalnya aku pikir biasa aja, sampai sore ini... aku melihat Bram memegang tangan Lina di parkiran belakang sekolah saat sepi. Mereka pikir nggak ada yang lihat, tapi Bram ceroboh.",
+                choices: [
+                    { text: "Ceritakan apa yang kulihat ke Sarah .", nextNode: "gossip_sarah" },
+                    { text: "Tegur Bram dan Lina langsung di tempat.", nextNode: "confront_direct" },
+                    { text: "Diam saja dan pura-pura tidak tahu.", nextNode: "keep_silent" }
+                ]
+            },
+            
+            // BRANCH 1: GOSSIP (CANON PATH)
+            gossip_sarah: {
+                title: "Penyebaran Berita",
+                text: "Rasa penasaran mengalahkan logikaku. Aku langsung menemui Sarah. 'Sar, lo gak bakal percaya apa yang gue liat.'<br><br>Seperti api disiram bensin, Sarah langsung heboh. Dalam hitungan hari, satu circle tahu kalau Bram dan Lina pacaran diam-diam. Berita ini akhirnya sampai ke telinga Dika.<br><br>Saat kami nongkrong, Dika cuma senyum tipis. 'Gue gapapa kok, santai elah,' katanya. Tapi sejak hari itu, Dika mulai menarik diri. Kalau ditanya, jawabannya selalu template: 'Aman, gue sibuk aja.'",
+                choices: [
+                    { text: "Lanjut ke acara Camping Kelas.", nextNode: "camping_trip" }
+                ]
+            },
+
+            // BRANCH 2: DIRECT CONFRONTATION (Riskier)
+            confront_direct: {
+                title: "Labrakan di Parkiran",
+                text: "Aku keluar dari persembunyian. 'Woy! Jadi ini alesan lo berdua sering ilang?'<br><br>Bram kaget setengah mati. Lina menunduk malu. Bram memohon padaku, 'Yan, tolong jangan sebarin dulu. Gue belum enak sama Dika.'<br><br>Aku berjanji diam, tapi gerak-gerik mereka yang canggung membuat Dika curiga sendiri tanpa perlu aku beritahu.",
+                choices: [
+                    { text: "Biarkan Dika mencari tahu sendiri.", nextNode: "dika_finds_out_slowly" }
+                ]
+            },
+
+            // BRANCH 3: SILENT (Passive)
+            keep_silent: {
+                title: "Memendam Rahasia",
+                text: "Aku memilih mundur. Itu urusan mereka. Tapi memendam rahasia di circle sendiri itu berat. Dika masih sering curhat tentang Lina ke aku, tidak tahu kalau Lina sudah jadian sama Bram.<br><br>Rasa bersalahku menumpuk, dan suasana circle jadi aneh karena aku satu-satunya yang tahu tapi diam saja.",
+                choices: [
+                    { text: "Lanjut ke acara Camping Kelas.", nextNode: "camping_neutral" }
+                ]
+            },
+
+            dika_finds_out_slowly: {
+                title: "Insting Sahabat",
+                text: "Dika bukan orang bodoh. Dia menyadari perubahan sikap Lina. Tanpa ada drama besar, Dika perlahan mundur. Hubungan circle kami jadi dingin, tapi tidak meledak. Hingga akhirnya acara camping tiba.",
+                choices: [
+                    { text: "Berangkat Camping.", nextNode: "camping_neutral" }
+                ]
+            },
+
+            // MIDPOINT: CAMPING (CANON)
+            camping_trip: {
+                title: "Malam di Hutan Pinus",
+                text: "Acara camping kelas diadakan. Udaranya dingin, tapi suasana di antara kami lebih dingin. Dika ada di sana, tapi dia seperti orang asing. Dia memisahkan diri saat acara api unggun.<br><br>Aku, Sarah, dan Bram saling pandang. Kita gak bisa gini terus. Bram kelihatan paling merasa bersalah karena dia sumber masalahnya.<br><br>Apa yang harus kita lakukan?",
+                choices: [
+                    { text: "Ajak Bram, Sarah, dan Dika duduk bareng memisahkan diri dari kelas.", nextNode: "the_circle_talk" },
+                    { text: "Biarkan Dika sendiri, mungkin dia butuh waktu.", nextNode: "ignore_dika" }
+                ]
+            },
+
+            camping_neutral: {
+                title: "Api Unggun yang Hening",
+                text: "Di depan api unggun, Dika duduk jauh dari Bram. Tidak ada yang berani memulai pembicaraan. Rahasia itu (atau kecanggungan itu) menjadi tembok besar.<br><br>Aku merasa harus melakukan sesuatu, tapi aku takut memperkeruh suasana.",
+                choices: [
+                    { text: "Paksakan mereka bicara sekarang juga.", nextNode: "forced_talk" },
+                    { text: "Nikmati saja acara kelas, jangan bahas masalah pribadi.", nextNode: "status_quo" }
+                ]
+            },
+
+            // CLIMAX
+            the_circle_talk: {
+                title: "Sidang Tengah Malam",
+                text: "Kami berempat—Aku, Sarah, Bram, dan Dika—menyingkir ke dekat tenda logistik. Suasana tegang.<br><br>Dika diam saja menatap tanah. Bram terlihat ingin bicara tapi takut. Sarah menyenggol lenganku. Sebagai orang yang pertama kali menyebar berita ini, aku merasa harus membuka pembicaraan.",
+                choices: [
+                    { text: "Minta maaf dan suruh Bram jujur sejujur-jujurnya.", nextNode: "resolution_good" },
+                    { text: "Salahkan Dika karena terlalu 'baper' (bawa perasaan).", nextNode: "resolution_bad" }
+                ]
+            },
+
+            forced_talk: {
+                title: "Paksaan yang Gagal",
+                text: "Aku menarik Bram dan Dika paksa. 'Kalian harus ngomong!' bentakku. Dika menepis tanganku. 'Gak ada yang perlu diomongin, Yan. Udah basi.'<br><br>Dika masuk ke tenda dan tidak keluar lagi sampai pagi.",
+                choices: [
+                    { text: "Lihat hasil akhirnya.", nextNode: "ending_neutral" }
+                ]
+            },
+
+            ignore_dika: {
+                title: "Malam yang Panjang",
+                text: "Kami membiarkan Dika sendirian merenung di pinggir danau. Bram sibuk dengan Lina. Sarah sibuk dengan teman lain. Circle kami terasa sudah tidak utuh lagi.",
+                choices: [
+                    { text: "Tidur dan lihat besok pagi.", nextNode: "ending_neutral" }
+                ]
+            },
+
+            // ENDINGS
+            resolution_good: {
+                badge: "Good Ending",
+                badgeClass: "good",
+                title: "Fajar Perdamaian",
+                text: "Aku mulai duluan. 'Dik, sori gue sama Sarah malah nyebarin ini di belakang lo. Harusnya lo tau dari kita.'<br><br>Bram akhirnya buka suara, mengakui kesalahannya mendekati Lina tanpa bilang ke Dika. Malam itu panjang. Kami begadang, mengeluarkan semua unek-unek, marah, lalu tertawa getir.<br><br>Pagi harinya, mata kami bengkak kurang tidur. Tapi beban itu hilang. Dika menepuk bahu Bram, 'Jagain Lina, awas lo macem-macem.'<br><br>Dika kembali seperti biasa. Bram dan Lina langgeng sampai sekarang. Persahabatan kami selamat karena komunikasi.",
+                choices: [
+                    { text: "Main Lagi", nextNode: "start" }
+                ]
+            },
+
+            resolution_bad: {
+                badge: "Bad Ending",
+                badgeClass: "bad",
+                title: "Lingkaran yang Pecah",
+                text: "Aku malah terpancing emosi. 'Lagian lo kenapa sih Dik? Baper banget jadi cowok. Lina kan bebas milih siapa aja!'<br><br>Mata Dika memerah menahan marah. Dia tidak berkata apa-apa, hanya berdiri dan meninggalkan kami bertiga. <br><br>Sejak malam itu, Dika benar-benar keluar dari circle. Bram dan Lina tetap pacaran tapi selalu diliputi rasa bersalah. Circle kami hancur karena ego.",
+                choices: [
+                    { text: "Coba Lagi", nextNode: "start" }
+                ]
+            },
+
+            status_quo: {
+                badge: "Neutral Ending",
+                badgeClass: "neutral",
+                title: "Teman Tapi Asing",
+                text: "Malam itu berlalu begitu saja. Tidak ada konfrontasi, tidak ada penyelesaian. Kami pulang dari camping seperti biasa.<br><br>Secara fisik, kami masih satu circle. Tapi rasanya ada tembok kaca. Dika tidak pernah benar-benar terbuka lagi. Bram dan Lina pacaran dengan canggung di depan kami. Kami berteman, tapi rasanya palsu.",
+                choices: [
+                    { text: "Coba Lagi", nextNode: "start" }
+                ]
+            },
+
+            ending_neutral: {
+                badge: "Neutral Ending",
+                badgeClass: "neutral",
+                title: "Jarak yang Melebar",
+                text: "Paginya, Dika bersikap biasa saja seolah tidak terjadi apa-apa. Tapi dia menolak setiap ajakan nongkrong setelah sekolah.<br><br>Perlahan tapi pasti, Dika menghilang dari hidup kami. Tidak ada pertengkaran hebat, hanya kesunyian yang pelan-pelan memisahkan. Bram dan Lina langgeng, tapi kami kehilangan satu sahabat terbaik.",
+                choices: [
+                    { text: "Coba Lagi", nextNode: "start" }
+                ]
+            }
+        };
+
+        // Engine
+        function showNode(nodeKey) {
+            const node = storyNodes[nodeKey];
+            const contentDiv = document.getElementById('game-content');
+            
+            let html = '';
+
+            // Badge for endings
+            if (node.badge) {
+                html += `<span class="ending-badge ${node.badgeClass}">${node.badge}</span>`;
+            }
+
+            html += `<h1>${node.title}</h1>`;
+            html += `<p class="story-text">${node.text}</p>`;
+            
+            html += `<div class="choices">`;
+            node.choices.forEach(choice => {
+                html += `<button onclick="showNode('${choice.nextNode}')">${choice.text}</button>`;
+            });
+            html += `</div>`;
+
+            if (nodeKey === 'start') {
+                html += `<p class="subtitle">Sebuah cerita tentang persahabatan, rahasia, dan kedewasaan.</p>`;
+            }
+
+            contentDiv.innerHTML = html;
+        }
+
+        // Initialize
+        showNode('start');
+
+    </script>
+</body>
+</html>
